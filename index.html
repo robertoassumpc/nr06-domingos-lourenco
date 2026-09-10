@@ -1,0 +1,1141 @@
+<title>NR-06 Domingos Lourenço</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --paper:#F4F7F5; --paper-raised:#FFFFFF; --paper-sunken:#E9EFEC;
+  --ink:#132420; --ink-soft:#4B5B55; --ink-faint:#7C8B85;
+  --line:#D7E1DC; --line-strong:#B9C8C1;
+  --teal-700:#0B5A4E; --teal-600:#0F7A68; --teal-500:#159A82; --teal-100:#DCEEE8;
+  --amber-700:#8A5A0B; --amber-600:#B4740E; --amber-100:#F8E9CF;
+  --green-700:#1F6B45; --green-600:#2E7D53; --green-100:#E1F0E6;
+  --red-700:#8C2E2E; --red-600:#B23A3A; --red-100:#F8E6E6;
+  --focus:#0F7A68;
+  --shadow: 0 1px 2px rgba(19,36,32,.06), 0 6px 16px -8px rgba(19,36,32,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1613; --paper-raised:#141F1B; --paper-sunken:#0A100E;
+    --ink:#E7F1EC; --ink-soft:#AFC2BB; --ink-faint:#7C9089;
+    --line:#233531; --line-strong:#31473F;
+    --teal-700:#6FD3B9; --teal-600:#49BFA0; --teal-500:#2EA98A; --teal-100:#12332B;
+    --amber-700:#F0C374; --amber-600:#D89A3D; --amber-100:#2E2411;
+    --green-700:#8FDBAE; --green-600:#5CBE8A; --green-100:#12301F;
+    --red-700:#F0A3A3; --red-600:#DD7373; --red-100:#341717;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 24px -10px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1613; --paper-raised:#141F1B; --paper-sunken:#0A100E;
+  --ink:#E7F1EC; --ink-soft:#AFC2BB; --ink-faint:#7C9089;
+  --line:#233531; --line-strong:#31473F;
+  --teal-700:#6FD3B9; --teal-600:#49BFA0; --teal-500:#2EA98A; --teal-100:#12332B;
+  --amber-700:#F0C374; --amber-600:#D89A3D; --amber-100:#2E2411;
+  --green-700:#8FDBAE; --green-600:#5CBE8A; --green-100:#12301F;
+  --red-700:#F0A3A3; --red-600:#DD7373; --red-100:#341717;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 24px -10px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box;}
+html,body{background:var(--paper); color:var(--ink);}
+body{
+  margin:0; font-family:"Source Serif 4", Georgia, "Times New Roman", serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.ui{ font-family:"Archivo", "Helvetica Neue", Arial, sans-serif; text-wrap:balance; }
+.mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums; }
+a{color:var(--teal-700);}
+::selection{ background:var(--teal-100); color:var(--teal-700); }
+:focus-visible{ outline:2.5px solid var(--focus); outline-offset:2px; border-radius:4px; }
+
+button{ font:inherit; cursor:pointer; }
+input,select,textarea{ font-family:inherit; font-size:inherit; color:var(--ink); }
+
+.eyebrow{
+  font-family:"Archivo"; font-weight:700; font-size:.72rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--teal-600);
+}
+
+/* ============ SHELL ============ */
+.app-shell{
+  display:grid; grid-template-columns: 296px 1fr; grid-template-rows: 68px 1fr;
+  min-height:100vh; background:var(--paper);
+}
+.topbar{
+  grid-column:1/-1; display:flex; align-items:center; gap:16px;
+  padding:0 22px; border-bottom:1px solid var(--line); background:var(--paper-raised);
+  position:sticky; top:0; z-index:30;
+}
+.topbar .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+.topbar .brand .mark{
+  width:34px;height:34px;border-radius:9px;background:var(--teal-700);
+  color:var(--paper-raised); display:grid; place-items:center; flex:none;
+  font-family:"Archivo"; font-weight:800; font-size:.78rem; letter-spacing:.02em;
+}
+.topbar .brand .name{ font-family:"Archivo"; font-weight:700; font-size:1rem; white-space:nowrap; }
+.topbar .brand .sub{ font-size:.74rem; color:var(--ink-faint); font-family:"Archivo"; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar .spacer{flex:1;}
+.progress-wrap{ display:flex; align-items:center; gap:10px; }
+.progress-track{ width:150px; height:7px; border-radius:99px; background:var(--paper-sunken); overflow:hidden; border:1px solid var(--line);}
+.progress-fill{ height:100%; background:linear-gradient(90deg,var(--teal-500),var(--teal-700)); width:0%; transition:width .4s ease; }
+.progress-label{ font-family:"Archivo"; font-weight:600; font-size:.75rem; color:var(--ink-soft); white-space:nowrap;}
+.menu-btn{ display:none; background:none; border:1px solid var(--line); border-radius:8px; width:38px; height:38px; align-items:center; justify-content:center; color:var(--ink);}
+
+.sidebar{
+  border-right:1px solid var(--line); background:var(--paper-raised);
+  padding:18px 12px 32px; overflow-y:auto; position:sticky; top:68px; height:calc(100vh - 68px);
+}
+.side-group-title{
+  font-family:"Archivo"; font-weight:700; font-size:.68rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-faint); padding:14px 10px 6px;
+}
+.side-group-title:first-child{padding-top:4px;}
+.side-link{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  border:none; background:none; padding:9px 10px; border-radius:9px; color:var(--ink-soft);
+  font-family:"Archivo"; font-weight:600; font-size:.87rem; margin-bottom:2px;
+}
+.side-link .num{
+  flex:none; width:21px; height:21px; border-radius:7px; background:var(--paper-sunken);
+  display:grid; place-items:center; font-family:"IBM Plex Mono"; font-size:.68rem; font-weight:600;
+  color:var(--ink-faint); border:1px solid var(--line);
+}
+.side-link .label{flex:1; min-width:0;}
+.side-link:hover{ background:var(--paper-sunken); color:var(--ink); }
+.side-link.active{ background:var(--teal-100); color:var(--teal-700); }
+.side-link.active .num{ background:var(--teal-700); color:var(--paper-raised); border-color:var(--teal-700);}
+.side-link.done .num{ background:var(--green-600); color:#fff; border-color:var(--green-600); }
+.side-link.done .num::after{ content:"✓"; }
+.side-link.done .num.txt{ font-size:0; }
+
+main.content{ padding:40px 44px 100px; max-width:920px; overflow-x:hidden; }
+.pane{ display:none; }
+.pane.active{ display:block; animation:fade .28s ease; }
+@media (prefers-reduced-motion: reduce){ .pane.active{animation:none;} }
+@keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+.kicker{ display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+.pill{
+  font-family:"Archivo"; font-weight:700; font-size:.68rem; letter-spacing:.05em;
+  padding:3px 9px; border-radius:99px; text-transform:uppercase;
+}
+.pill.teal{ background:var(--teal-100); color:var(--teal-700); }
+.pill.amber{ background:var(--amber-100); color:var(--amber-700); }
+.pill.green{ background:var(--green-100); color:var(--green-700); }
+
+h1.page-title{ font-size:2rem; font-weight:800; margin:0 0 6px; letter-spacing:-.01em;}
+p.lede{ font-size:1.08rem; color:var(--ink-soft); max-width:62ch; margin:0 0 28px;}
+h2.sec{ font-size:1.28rem; font-weight:700; margin:36px 0 12px; padding-top:6px; border-top:1px solid var(--line);}
+h2.sec:first-of-type{border-top:none; padding-top:0;}
+h3.sub{ font-size:1.04rem; font-weight:700; margin:22px 0 8px; color:var(--teal-700);}
+p{ max-width:66ch; }
+ul.list, ol.list{ padding-left:1.3em; max-width:64ch; }
+ul.list li, ol.list li{ margin-bottom:7px; }
+
+.card{
+  background:var(--paper-raised); border:1px solid var(--line); border-radius:14px;
+  padding:18px 20px; box-shadow:var(--shadow);
+}
+.callout{
+  border-radius:12px; padding:16px 18px; margin:18px 0; border:1px solid var(--line);
+  display:flex; gap:12px; max-width:66ch;
+}
+.callout .ic{ flex:none; font-size:1.1rem; line-height:1.4; }
+.callout.legal{ background:var(--teal-100); border-color:var(--teal-500); }
+.callout.warn{ background:var(--amber-100); border-color:var(--amber-600); }
+.callout p, .callout div{margin:0;}
+.callout .t{ font-family:"Archivo"; font-weight:700; font-size:.82rem; margin-bottom:3px; letter-spacing:.01em;}
+.callout.legal .t{color:var(--teal-700);}
+.callout.warn .t{color:var(--amber-700);}
+
+table{ border-collapse:collapse; width:100%; font-size:.92rem; }
+.table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:12px; margin:16px 0 26px; background:var(--paper-raised); }
+table th{ text-align:left; font-family:"Archivo"; font-weight:700; font-size:.72rem; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--ink-faint); background:var(--paper-sunken); padding:10px 14px; border-bottom:1px solid var(--line); white-space:nowrap;}
+table td{ padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+table tr:last-child td{border-bottom:none;}
+table td.code{ font-family:"IBM Plex Mono"; font-size:.8rem; color:var(--teal-700); white-space:nowrap;}
+
+.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+@media (max-width:760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+.epi-card{ border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--paper-raised); }
+.epi-card .name{ font-family:"Archivo"; font-weight:700; font-size:.95rem; margin-bottom:4px;}
+.epi-card .risk{ font-size:.82rem; color:var(--ink-soft); }
+.epi-card .ca{ margin-top:8px; font-family:"IBM Plex Mono"; font-size:.72rem; color:var(--amber-700); background:var(--amber-100); display:inline-block; padding:2px 7px; border-radius:6px;}
+
+.btn{
+  font-family:"Archivo"; font-weight:700; font-size:.86rem; border-radius:10px; border:1px solid transparent;
+  padding:11px 18px; display:inline-flex; align-items:center; gap:8px;
+}
+.btn.primary{ background:var(--teal-700); color:#fff; }
+.btn.primary:hover{ background:var(--teal-600); }
+.btn.primary:disabled{ background:var(--paper-sunken); color:var(--ink-faint); cursor:not-allowed; }
+.btn.ghost{ background:var(--paper-raised); border-color:var(--line-strong); color:var(--ink); }
+.btn.ghost:hover{ background:var(--paper-sunken); }
+.btn.small{ padding:7px 12px; font-size:.78rem; border-radius:8px; }
+
+.module-nav-actions{ display:flex; justify-content:space-between; align-items:center; margin-top:38px; padding-top:20px; border-top:1px solid var(--line); gap:12px; flex-wrap:wrap;}
+
+/* quiz */
+.q{ border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:14px; background:var(--paper-raised);}
+.q .stem{ font-family:"Archivo"; font-weight:700; font-size:.95rem; margin-bottom:10px; }
+.q .opts{ display:flex; flex-direction:column; gap:7px; }
+.opt{ display:flex; align-items:flex-start; gap:9px; padding:8px 10px; border-radius:8px; border:1px solid var(--line); cursor:pointer; font-size:.9rem;}
+.opt:hover{ background:var(--paper-sunken); }
+.opt input{ margin-top:3px; accent-color:var(--teal-700); }
+.opt.correct{ background:var(--green-100); border-color:var(--green-600); }
+.opt.wrong{ background:var(--red-100); border-color:var(--red-600); }
+.q .fb{ margin-top:10px; font-size:.85rem; padding:9px 11px; border-radius:8px; display:none; }
+.q .fb.show{display:block;}
+.q .fb.ok{ background:var(--green-100); color:var(--green-700); }
+.q .fb.bad{ background:var(--red-100); color:var(--red-700); }
+
+.score-banner{ border-radius:14px; padding:22px 24px; margin:20px 0; display:flex; align-items:center; gap:20px; border:1px solid var(--line);}
+.score-banner .num{ font-family:"IBM Plex Mono"; font-weight:600; font-size:2.4rem; line-height:1; }
+.score-banner.pass{ background:var(--green-100); border-color:var(--green-600); }
+.score-banner.pass .num{ color:var(--green-700); }
+.score-banner.fail{ background:var(--red-100); border-color:var(--red-600); }
+.score-banner.fail .num{ color:var(--red-700); }
+
+/* form */
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:760px; }
+.form-grid .full{ grid-column:1/-1; }
+label.field{ display:flex; flex-direction:column; gap:5px; font-family:"Archivo"; font-size:.78rem; font-weight:600; color:var(--ink-soft);}
+label.field input, label.field select{
+  border:1px solid var(--line-strong); border-radius:9px; padding:10px 12px; background:var(--paper-raised); color:var(--ink);
+}
+@media (max-width:760px){ .form-grid{grid-template-columns:1fr;} }
+
+/* certificate */
+.cert{
+  border:2px solid var(--teal-700); border-radius:4px; padding:44px 48px; background:var(--paper-raised);
+  max-width:760px; position:relative; margin-top:10px;
+}
+.cert::before{
+  content:""; position:absolute; inset:8px; border:1px solid var(--line-strong); border-radius:2px; pointer-events:none;
+}
+.cert .top{ text-align:center; margin-bottom:18px;}
+.cert .top .k{ font-family:"Archivo"; font-weight:700; letter-spacing:.14em; font-size:.72rem; color:var(--teal-600); text-transform:uppercase;}
+.cert .top h2{ font-family:"Source Serif 4"; font-weight:700; font-size:1.7rem; margin:6px 0 2px;}
+.cert .name{ text-align:center; font-family:"Source Serif 4"; font-weight:700; font-size:1.55rem; margin:20px 0 4px; border-bottom:1px solid var(--line-strong); padding-bottom:10px;}
+.cert .body-txt{ text-align:center; color:var(--ink-soft); font-size:.96rem; margin:0 auto 22px; max-width:56ch;}
+.cert .meta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 26px; font-size:.84rem; margin-bottom:26px;}
+.cert .meta-grid .k{ color:var(--ink-faint); font-family:"Archivo"; font-weight:600; font-size:.68rem; text-transform:uppercase; letter-spacing:.04em;}
+.cert .sign-row{ display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:34px;}
+.cert .sign{ text-align:center; }
+.cert .sign .line{ border-top:1px solid var(--ink); margin-bottom:6px; height:34px;}
+.cert .sign .who{ font-size:.78rem; color:var(--ink-soft);}
+.cert .id{ position:absolute; bottom:14px; right:20px; font-family:"IBM Plex Mono"; font-size:.62rem; color:var(--ink-faint);}
+
+/* checklist */
+.chk-cat{ margin:22px 0; }
+.chk-item{ display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px dashed var(--line); }
+.chk-item input{ margin-top:4px; width:16px; height:16px; accent-color:var(--teal-700); flex:none;}
+.chk-item .txt{ font-size:.92rem; }
+.chk-item .ref{ font-family:"IBM Plex Mono"; font-size:.7rem; color:var(--teal-600); margin-left:6px;}
+
+@media (max-width:900px){
+  .app-shell{ grid-template-columns:1fr; }
+  .sidebar{ position:fixed; left:0; top:68px; width:280px; z-index:40; transform:translateX(-100%); transition:transform .22s ease; box-shadow:var(--shadow);}
+  .sidebar.open{ transform:none; }
+  .menu-btn{ display:flex; }
+  main.content{ padding:28px 20px 90px; }
+  .cert{ padding:28px 20px; }
+}
+
+@media print{
+  .topbar, .sidebar, .menu-btn, .no-print{ display:none !important; }
+  .app-shell{ display:block; }
+  main.content{ padding:0; max-width:none; }
+  body{ background:#fff; }
+  .pane{ display:none !important; }
+  .pane.printing{ display:block !important; }
+  .cert{ box-shadow:none; }
+}
+</style>
+
+<div class="app-shell">
+  <div class="topbar">
+    <button class="menu-btn ui" id="menuBtn" aria-label="Abrir menu">☰</button>
+    <div class="brand">
+      <div class="mark">SST</div>
+      <div>
+        <div class="name">NR‑06 · EPI — EAD</div>
+        <div class="sub">SESMT · Hospital Domingos Lourenço</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="progress-wrap no-print">
+      <div class="progress-label"><span id="progPct">0%</span> concluído</div>
+      <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    </div>
+  </div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="side-group-title">Projeto pedagógico</div>
+    <button class="side-link" data-target="apresentacao"><span class="num txt">i</span><span class="label">Apresentação</span></button>
+
+    <div class="side-group-title">Trilha do curso</div>
+    <button class="side-link" data-target="m1"><span class="num txt">1</span><span class="label">Fundamentos da NR‑06</span></button>
+    <button class="side-link" data-target="m2"><span class="num txt">2</span><span class="label">Responsabilidades</span></button>
+    <button class="side-link" data-target="m3"><span class="num txt">3</span><span class="label">EPI no ambiente hospitalar</span></button>
+    <button class="side-link" data-target="m4"><span class="num txt">4</span><span class="label">Uso, ajuste e vedação</span></button>
+    <button class="side-link" data-target="m5"><span class="num txt">5</span><span class="label">Limitações e restrições</span></button>
+    <button class="side-link" data-target="m6"><span class="num txt">6</span><span class="label">Higienização e descarte</span></button>
+    <button class="side-link" data-target="m7"><span class="num txt">7</span><span class="label">Prática presencial</span></button>
+    <button class="side-link" data-target="avaliacao"><span class="num txt">8</span><span class="label">Avaliação</span></button>
+    <button class="side-link" data-target="certificado"><span class="num txt">9</span><span class="label">Certificado</span></button>
+
+    <div class="side-group-title">Para o SESMT / auditoria</div>
+    <button class="side-link" data-target="matriz"><span class="num txt">M</span><span class="label">Matriz de conformidade</span></button>
+    <button class="side-link" data-target="checklist"><span class="num txt">A</span><span class="label">Checklist de auditoria</span></button>
+  </nav>
+
+  <main class="content">
+
+    <!-- ============ APRESENTAÇÃO / PROJETO PEDAGÓGICO ============ -->
+    <section class="pane" data-pane="apresentacao">
+      <div class="kicker"><span class="pill teal">Projeto pedagógico</span><span class="pill amber">Anexo II da NR‑01, item 3.1</span></div>
+      <h1 class="page-title">Capacitação em NR‑06 — Equipamentos de Proteção Individual</h1>
+      <p class="lede">Modalidade semipresencial (EAD + prática presencial obrigatória), estruturada para o Hospital Domingos Lourenço conforme a NR‑06 (Portaria MTE nº 57/2025) e as diretrizes de capacitação da NR‑01, item 1.7 e Anexo II.</p>
+
+      <div class="callout warn">
+        <div class="ic">⚠️</div>
+        <div>
+          <div class="t">Por que "semipresencial" e não 100% EAD</div>
+          <p>A NR‑01, item 1.7.9.1, só permite que o conteúdo <b>prático</b> de uma capacitação seja feito a distância "desde que previsto em NR específica". A NR‑06 não prevê isso para o ajuste e uso do EPI — pelo contrário, exige que o trabalhador saiba a "forma adequada de uso e ajuste" (item 6.7.2‑d), o que só se verifica de fato com demonstração presencial supervisionada. Por isso este curso é EAD na parte teórica (módulos 1–6) e presencial na parte prática (módulo 7), com checklist assinado pelo responsável técnico.</p>
+        </div>
+      </div>
+
+      <div class="callout legal">
+        <div class="ic">✉️</div>
+        <div>
+          <div class="t">Como funciona o controle de presença</div>
+          <p>O progresso de cada módulo fica salvo apenas no navegador de quem está fazendo o curso — não existe um painel central automático. Por isso, ao concluir a avaliação e gerar o certificado (módulo 9), cada trabalhador confirma a conclusão enviando um e‑mail pré‑preenchido para <b><span class="control-email mono"></span></b>. O SESMT usa esses e‑mails para montar a lista de presença e conferir quem falta concluir — <b>o envio depende de uma ação do próprio trabalhador, feita ao final do curso</b>, então reforce isso ao divulgar o curso.</p>
+        </div>
+      </div>
+
+      <h2 class="sec">a–b) Objetivo geral e conceitos de SST envolvidos</h2>
+      <p>Capacitar os trabalhadores do Hospital Domingos Lourenço a selecionar, usar, ajustar, higienizar, conservar e descartar corretamente os Equipamentos de Proteção Individual associados às suas atividades, em conformidade com a NR‑06 e com a interface da NR‑32 (serviços de saúde), reduzindo a exposição a agentes biológicos, químicos e de acidente.</p>
+
+      <h2 class="sec">c) Estratégia pedagógica</h2>
+      <ul class="list">
+        <li><b>Teoria (EAD, assíncrona):</b> 6 módulos em Ambiente Virtual de Aprendizagem (AVA), com avaliação de aprendizagem ao final.</li>
+        <li><b>Prática (presencial ou semipresencial supervisionada):</b> módulo 7 — demonstração de colocação, ajuste, teste de vedação e retirada segura, com checklist individual assinado.</li>
+        <li><b>Canal de dúvidas:</b> operacional durante todo o período do curso (WhatsApp/e‑mail do SESMT — a preencher pela organização), conforme Anexo II, item 4.5.</li>
+      </ul>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item do Anexo II (NR‑01)</th><th>Como este projeto pedagógico atende</th></tr></thead>
+          <tbody>
+            <tr><td class="code">d) responsável técnico</td><td>A ser nomeado pela organização/SESMT — profissional legalmente habilitado em Segurança do Trabalho (engenheiro de segurança ou técnico de segurança do trabalho), identificado no certificado.</td></tr>
+            <tr><td class="code">e) instrutores</td><td>A ser preenchido no certificado (nome e qualificação de quem ministrou/validou o conteúdo).</td></tr>
+            <tr><td class="code">f) infraestrutura de apoio</td><td>AVA (esta plataforma) + canal de dúvidas + ambiente presencial do hospital para o módulo prático + confirmação de conclusão por e‑mail para <span class="control-email mono"></span> (ver módulo 9).</td></tr>
+            <tr><td class="code">g) conteúdo teórico/prático</td><td>Módulos 1–6 (teoria) e módulo 7 (prática) — ver trilha do curso.</td></tr>
+            <tr><td class="code">h) objetivo de cada módulo</td><td>Descrito na abertura de cada módulo.</td></tr>
+            <tr><td class="code">i) carga horária</td><td>Ver recomendação abaixo — a validar pelo responsável técnico.</td></tr>
+            <tr><td class="code">j) dedicação diária mínima</td><td>Sugerido: até 2 módulos por sessão (~45–60 min), para preservar concentração.</td></tr>
+            <tr><td class="code">k) prazo máximo de conclusão</td><td>Sugerido: 15 dias corridos a partir da liberação do acesso.</td></tr>
+            <tr><td class="code">l) público‑alvo</td><td>Trabalhadores do Hospital Domingos Lourenço que recebem EPI para suas atividades (assistenciais, apoio, manutenção).</td></tr>
+            <tr><td class="code">m) material didático</td><td>Esta plataforma (texto, tabelas, checklist) — disponível a qualquer momento durante o curso.</td></tr>
+            <tr><td class="code">n) instrumentos de potencialização</td><td>Tabelas de risco por setor, quiz com feedback imediato, checklist prático.</td></tr>
+            <tr><td class="code">o) avaliação de aprendizagem</td><td>Módulo 8 — 10 questões, nota mínima 70% (conceito satisfatório), com situações práticas de rotina (item 4.6.3 do Anexo II).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">Carga horária recomendada (a validar pelo SESMT)</h3>
+      <p>A NR‑06 não fixa carga horária própria. Como referência técnica — a documentar formalmente no projeto pedagógico final da organização — sugere‑se:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Bloco</th><th>Conteúdo</th><th>Carga horária sugerida</th></tr></thead>
+          <tbody>
+            <tr><td>Teórico (EAD)</td><td>Módulos 1 a 6</td><td class="code">4h</td></tr>
+            <tr><td>Prático (presencial)</td><td>Módulo 7 — colocação, ajuste, teste de vedação, retirada</td><td class="code">1h</td></tr>
+            <tr><td>Avaliação</td><td>Módulo 8</td><td class="code">30 min</td></tr>
+            <tr><td><b>Total</b></td><td>—</td><td class="code"><b>5h30</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.86rem;color:var(--ink-faint)">Se o setor envolver respirador PFF2/N95 com risco de aerossóis (isolamento respiratório) ou proteção contra quedas (NR‑35) e outros EPIs específicos, acrescente carga horária proporcional e módulos próprios dessas NRs.</p>
+
+      <h2 class="sec">Periodicidade e reciclagem</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tipo (NR‑01, item 1.7.1.2)</th><th>Quando ocorre</th></tr></thead>
+          <tbody>
+            <tr><td><b>Inicial</b></td><td>Antes do trabalhador iniciar a função (item 1.7.1.2.1).</td></tr>
+            <tr><td><b>Periódico</b></td><td>NR‑06 não define prazo — a organização deve fixar um (recomenda‑se 12 meses, alinhado ao ciclo do PGR/CIPA).</td></tr>
+            <tr><td><b>Eventual</b></td><td>Mudança de risco/EPI/procedimento; acidente grave; retorno de afastamento &gt; 180 dias (item 1.7.1.2.3).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="module-nav-actions">
+        <span></span>
+        <button class="btn primary" data-goto="m1">Começar módulo 1 →</button>
+      </div>
+    </section>
+
+    <!-- ============ MÓDULO 1 ============ -->
+    <section class="pane" data-pane="m1">
+      <div class="kicker"><span class="pill teal">Módulo 1 de 7</span><span class="pill amber">NR‑06, itens 6.1–6.4 e 6.9</span></div>
+      <h1 class="page-title">Fundamentos da NR‑06</h1>
+      <p class="lede">O que é um EPI, o que é o Certificado de Aprovação (CA) e como o Anexo I organiza os equipamentos por parte do corpo protegida.</p>
+
+      <h2 class="sec">O que é EPI</h2>
+      <p>Segundo o item 6.3.1 da NR‑06, EPI é "o dispositivo ou produto de uso individual utilizado pelo trabalhador, concebido e fabricado para oferecer proteção contra os riscos ocupacionais existentes no ambiente de trabalho". Quando o fabricante combina vários dispositivos contra um ou mais riscos, chama‑se <b>Equipamento Conjugado de Proteção Individual</b> (item 6.3.2) — por exemplo, um protetor facial acoplado a um capacete.</p>
+
+      <div class="callout legal">
+        <div class="ic">§</div>
+        <div><div class="t">Hierarquia das medidas de prevenção — NR‑01, item 1.4.1‑g</div>
+        <p>O EPI é a <b>última</b> barreira, não a primeira. A ordem legal de prioridade é: 1) eliminar o risco; 2) proteção coletiva; 3) medidas administrativas; 4) EPI. No hospital isso significa, por exemplo, priorizar precaução‑padrão e engenharia (agulhas com dispositivo de segurança) antes — e sempre além — do uso de luvas.</p></div>
+      </div>
+
+      <h2 class="sec">Certificado de Aprovação (CA)</h2>
+      <ul class="list">
+        <li>Nenhum EPI pode ser vendido ou usado sem CA válido, emitido pelo órgão nacional competente em SST (item 6.4.1 e 6.9.2.1).</li>
+        <li>Todo EPI deve trazer, de forma legível e indelével: <b>nome comercial do fabricante/importador, lote de fabricação e número do CA</b> (item 6.9.3).</li>
+        <li>O CA tem prazo de validade vinculado à avaliação de conformidade — <b>confira a validade antes de aceitar um lote novo</b> (item 6.9.2).</li>
+        <li>É proibido um fabricante "emprestar" o CA de outro sem processo próprio de obtenção (item 6.9.4).</li>
+      </ul>
+
+      <h2 class="sec">Anexo I — como os EPI são classificados</h2>
+      <p>A NR‑06 organiza os equipamentos em 9 categorias, por parte do corpo protegida. No módulo 3 detalhamos as que se aplicam ao Hospital Domingos Lourenço.</p>
+      <div class="grid-3">
+        <div class="epi-card"><div class="name">A · Cabeça</div><div class="risk">Capacete, capuz/balaclava</div></div>
+        <div class="epi-card"><div class="name">B · Olhos e face</div><div class="risk">Óculos, protetor facial, máscara de solda</div></div>
+        <div class="epi-card"><div class="name">C · Auditiva</div><div class="risk">Protetor circum‑auricular, de inserção, semiauricular</div></div>
+        <div class="epi-card"><div class="name">D · Respiratória</div><div class="risk">PFF1/2/3, respiradores motorizados e de adução de ar</div></div>
+        <div class="epi-card"><div class="name">E · Tronco</div><div class="risk">Vestimentas, colete balístico</div></div>
+        <div class="epi-card"><div class="name">F · Membros superiores</div><div class="risk">Luvas, creme protetor, manga, braçadeira, dedeira</div></div>
+        <div class="epi-card"><div class="name">G · Membros inferiores</div><div class="risk">Calçado, meia térmica, perneira, calça</div></div>
+        <div class="epi-card"><div class="name">H · Corpo inteiro</div><div class="risk">Macacão, vestimenta de corpo inteiro</div></div>
+        <div class="epi-card"><div class="name">I · Quedas de nível</div><div class="risk">Cinturão com trava‑queda, cinturão com talabarte</div></div>
+      </div>
+
+      <div class="callout legal">
+        <div class="ic">§</div>
+        <div><div class="t">Interface com a NR‑32</div>
+        <p>No hospital, a seleção do EPI também deve considerar a NR‑32 (Segurança e Saúde no Trabalho em Serviços de Saúde), que trata especificamente de risco biológico. A NR‑06 dá as categorias de equipamento; a NR‑32 orienta quando cada risco biológico exige qual EPI.</p></div>
+      </div>
+
+      <div class="module-nav-actions">
+        <button class="btn ghost" data-goto="apresentacao">← Apresentação</button>
+        <button class="btn primary" data-complete="m1" data-goto="m2">Concluir módulo 1 e avançar →</button>
+      </div>
+    </section>
+
+    <!-- ============ MÓDULO 2 ============ -->
+    <section class="pane" data-pane="m2">
+      <div class="kicker"><span class="pill teal">Módulo 2 de 7</span><span class="pill amber">NR‑06, itens 6.5 e 6.6</span></div>
+      <h1 class="page-title">Responsabilidades</h1>
+      <p class="lede">O que cabe ao Hospital Domingos Lourenço (organização) e o que cabe a cada trabalhador quanto ao EPI.</p>
+
+      <h2 class="sec">Responsabilidades da organização (item 6.5.1)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Letra</th><th>Obrigação</th></tr></thead>
+          <tbody>
+            <tr><td class="code">a</td><td>Adquirir somente EPI aprovado (com CA).</td></tr>
+            <tr><td class="code">b</td><td>Orientar e treinar o empregado — é este curso.</td></tr>
+            <tr><td class="code">c</td><td>Fornecer o EPI gratuitamente, em perfeito estado.</td></tr>
+            <tr><td class="code">d</td><td>Registrar o fornecimento (livro, ficha ou sistema eletrônico).</td></tr>
+            <tr><td class="code">e</td><td>Exigir o uso.</td></tr>
+            <tr><td class="code">f</td><td>Higienizar e fazer manutenção periódica, conforme o fabricante.</td></tr>
+            <tr><td class="code">g</td><td>Substituir imediatamente quando danificado ou extraviado.</td></tr>
+            <tr><td class="code">h</td><td>Comunicar irregularidades ao órgão competente em SST.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A seleção do EPI deve considerar a atividade exercida, os riscos do PGR, a eficácia necessária, o conforto avaliado pelo conjunto de empregados e a compatibilidade quando vários EPI são usados juntos (item 6.5.2) — e deve ouvir o SESMT e a CIPA (item 6.5.2.2).</p>
+
+      <h2 class="sec">Responsabilidades do trabalhador (item 6.6.1)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Letra</th><th>Obrigação</th></tr></thead>
+          <tbody>
+            <tr><td class="code">a</td><td>Usar o EPI fornecido pelo hospital.</td></tr>
+            <tr><td class="code">b</td><td>Usar apenas para a finalidade a que se destina.</td></tr>
+            <tr><td class="code">c</td><td>Zelar pela limpeza, guarda e conservação.</td></tr>
+            <tr><td class="code">d</td><td>Comunicar quando extraviado, danificado ou impróprio para uso.</td></tr>
+            <tr><td class="code">e</td><td>Cumprir as determinações do hospital sobre o uso adequado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <div class="ic">⚠️</div>
+        <div><div class="t">Consequência do não uso</div>
+        <p>Recusar‑se, sem justificativa, a usar o EPI ou a cumprir as normas de SST constitui ato faltoso (NR‑01, item 1.4.2.1) — pode gerar consequências disciplinares, além do risco à própria saúde.</p></div>
+      </div>
+
+      <div class="module-nav-actions">
+        <button class="btn ghost" data-goto="m1">← Módulo 1</button>
+        <button class="btn primary" data-complete="m2" data-goto="m3">Concluir módulo 2 e avançar →</button>
+      </div>
+    </section>
+
+    <!-- ============ MÓDULO 3 ============ -->
+    <section class="pane" data-pane="m3">
+      <div class="kicker"><span class="pill teal">Módulo 3 de 7</span><span class="pill amber">NR‑06, Anexo I aplicado</span></div>
+      <h1 class="page-title">EPI no ambiente hospitalar</h1>
+      <p class="lede">Os equipamentos mais usados no Hospital Domingos Lourenço, o risco que cada um cobre e um alerta crítico sobre máscara cirúrgica x respirador.</p>
+
+      <div class="grid-2">
+        <div class="epi-card"><div class="name">🧤 Luva de procedimento</div><div class="risk">Contato com sangue, fluidos e superfícies contaminadas.</div><div class="ca">Anexo I · F.1‑e (agentes biológicos)</div></div>
+        <div class="epi-card"><div class="name">🥽 Óculos de proteção</div><div class="risk">Respingo de fluidos nos olhos.</div><div class="ca">Anexo I · B.1‑a (impacto de partículas volantes)</div></div>
+        <div class="epi-card"><div class="name">😷 Máscara cirúrgica</div><div class="risk">Barreira de gotículas — <b>não é EPI contra aerossóis.</b></div><div class="ca">Dispositivo médico (ANVISA), não classificado no Anexo I</div></div>
+        <div class="epi-card"><div class="name">😮‍💨 Respirador PFF2/N95</div><div class="risk">Aerossóis (ex.: tuberculose, sarampo, varicela, COVID‑19).</div><div class="ca">Anexo I · D.1‑b</div></div>
+        <div class="epi-card"><div class="name">🧥 Avental/capote impermeável</div><div class="risk">Respingo de fluidos no tronco/braços.</div><div class="ca">Anexo I · E.1‑c</div></div>
+        <div class="epi-card"><div class="name">🥾 Calçado fechado antiderrapante</div><div class="risk">Perfurocortante, queda, respingo no pé.</div><div class="ca">Anexo I · G.1‑e/f</div></div>
+        <div class="epi-card"><div class="name">🛡️ Protetor facial</div><div class="risk">Respingo em toda a face (procedimentos geradores de aerossol).</div><div class="ca">Anexo I · B.2‑a</div></div>
+        <div class="epi-card"><div class="name">🧢 Gorro descartável</div><div class="risk">Contaminação em centro cirúrgico/áreas críticas.</div><div class="ca">Extensão do Anexo I · A.2</div></div>
+      </div>
+
+      <div class="callout warn">
+        <div class="ic">⚠️</div>
+        <div><div class="t">A distinção que mais gera não conformidade</div>
+        <p><b>Máscara cirúrgica</b> é um dispositivo médico que barra gotículas — ela <u>não</u> sela ao rosto e <u>não</u> filtra aerossóis. <b>Respirador PFF2/N95</b> é EPI, tem CA, sela ao rosto e exige teste de vedação antes de cada uso. Usar máscara cirúrgica onde a NR‑32/protocolo do hospital exige respirador é uma falha grave de proteção — não apenas administrativa.</p></div>
+      </div>
+
+      <h2 class="sec">EPI recomendado por situação (referência — validar com o PGR do hospital)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Situação</th><th>EPI mínimo</th></tr></thead>
+          <tbody>
+            <tr><td>Punção venosa / coleta</td><td>Luva de procedimento</td></tr>
+            <tr><td>Risco de respingo (curativo, aspiração)</td><td>Luva + óculos ou protetor facial + avental impermeável</td></tr>
+            <tr><td>Isolamento de contato</td><td>Luva + avental (a cada entrada no quarto)</td></tr>
+            <tr><td>Isolamento por aerossóis (ex.: TB, varicela)</td><td>Respirador PFF2/N95 (com teste de vedação) + óculos/protetor facial</td></tr>
+            <tr><td>Centro cirúrgico</td><td>Gorro + máscara cirúrgica + luva estéril + avental estéril + calçado privativo</td></tr>
+            <tr><td>Manuseio de perfurocortantes / expurgo</td><td>Luva de procedimento (ou nitrílica reforçada) + calçado fechado</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="module-nav-actions">
+        <button class="btn ghost" data-goto="m2">← Módulo 2</button>
+        <button class="btn primary" data-complete="m3" data-goto="m4">Concluir módulo 3 e avançar →</button>
+      </div>
+    </section>
+
+    <!-- ============ MÓDULO 4 ============ -->
+    <section class="pane" data-pane="m4">
+      <div class="kicker"><span class="pill teal">Módulo 4 de 7</span><span class="pill amber">NR‑06, item 6.7.2‑d</span></div>
+      <h1 class="page-title">Uso correto, ajuste e teste de vedação</h1>
+      <p class="lede">A "forma adequada de uso e ajuste" exigida pela NR‑06 — na prática.</p>
+
+      <h2 class="sec">Ordem de paramentação (colocar) em isolamento</h2>
+      <ol class="list">
+        <li>Higienizar as mãos.</li>
+        <li>Avental/capote.</li>
+        <li>Máscara ou respirador (ajustar clipe nasal e testar vedação — veja abaixo).</li>
+        <li>Óculos ou protetor facial.</li>
+        <li>Luvas, cobrindo o punho do avental.</li>
+      </ol>
+
+      <h2 class="sec">Ordem de retirada (despir) — a mais crítica para evitar autocontaminação</h2>
+      <ol class="list">
+        <li>Luvas (removidas sem tocar a parte externa).</li>
+        <li>Higienizar as mãos.</li>
+        <li>Óculos ou protetor facial (pelas hastes/elástico, não pela frente).</li>
+        <li>Avental (enrolando a parte contaminada para dentro).</li>
+        <li>Higienizar as mãos.</li>
+        <li>Máscara/respirador (pelos elásticos, sem tocar a parte frontal).</li>
+        <li>Higienizar as mãos.</li>
+      </ol>
+
+      <div class="callout legal">
+        <div class="ic">§</div>
+        <div><div class="t">Teste de vedação do respirador PFF2/N95 — faça antes de cada uso</div>
+        <ol class="list" style="margin:8px 0 0;">
+          <li>Molde o clipe nasal com as duas mãos, sem usar só uma.</li>
+          <li>Passe as duas tiras elásticas — uma na nuca, outra acima das orelhas.</li>
+          <li>Cubra o respirador com as duas mãos, sem alterar o ajuste.</li>
+          <li>Expire com força: se sentir ar escapando pelas laterais/nariz, reajuste.</li>
+          <li>Inspire com força: o respirador deve colabar levemente sobre o rosto; se não colabar, há vazamento.</li>
+        </ol>
+        <p style="margin-top:8px">Barba, óculos mal posicionados e o tamanho errado do respirador são as causas mais comuns de vedação inadequada — nenhum desses casos é "solucionável" só com treinamento teórico, por isso o módulo 7 é presencial.</p>
+        </div>
+      </div>
+
+      <h2 class="sec">Compatibilidade entre EPIs usados juntos</h2>
+      <p>Quando dois EPI são usados simultaneamente (item 6.5.2‑g), verifique se um não invalida o outro: óculos de haste larga podem quebrar a vedação do respirador; para quem usa lente corretiva, a seleção deve prever óculos de sobrepor ou adaptação, sem custo ao trabalhador (item 6.5.4).</p>
+
+      <div class="module-nav-actions">
+        <button class="btn ghost" data-goto="m3">← Módulo 3</button>
+        <button class="btn primary" data-complete="m4" data-goto="m5">Concluir módulo 4 e avançar →</button>
+      </div>
+    </section>
+
+    <!-- ============ MÓDULO 5 ============ -->
+    <section class="pane" data-pane="m5">
+      <div class="kicker"><span class="pill teal">Módulo 5 de 7</span><span class="pill amber">NR‑06, item 6.7.2‑c</span></div>
+      <h1 class="page-title">Limitações e restrições de proteção</h1>
+      <p class="lede">Todo EPI protege contra um risco específico — usar fora dessa finalidade é como não usar EPI algum.</p>
+
+      <ul class="list">
+        <li><b>Luva de procedimento</b> não protege contra perfurocortante — para isso existe luva de proteção mecânica/reforçada (item 6.6.1‑b: usar só para a finalidade a que se destina).</li>
+        <li><b>Máscara cirúrgica</b> não filtra aerossóis (ver módulo 3) e perde eficácia quando molhada.</li>
+        <li><b>Óculos de grau comuns</b> não substituem óculos de proteção, mesmo com lente resistente — faltam a vedação lateral e o CA.</li>
+        <li><b>Respirador PFF2/N95</b> não protege contra gases/vapores químicos — para isso é preciso peça facial com filtro químico específico (Anexo I, D.1‑e).</li>
+      </ul>
+
+      <h2 class="sec">Validade e número de higienizações</h2>
+      <p>O fabricante deve informar, quando aplicável, o número de higienizações acima do qual não se garante mais a proteção original — daí em diante o EPI deve ser substituído (item 6.8.1.1). Da mesma forma, observe sempre o prazo de validade e as condições de armazenamento informadas pelo fabricante (item 6.9.2.1.1).</p>
+
+      <h2 class="sec">Sinais de que o EPI perdeu eficácia</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sinal</th><th>Ação</th></tr></thead>
+          <tbody>
+            <tr><td>Rasgo, furo ou deformação visível</td><td>Substituir imediatamente e comunicar (itens 6.5.1‑g e 6.6.1‑d)</td></tr>
+            <tr><td>Elástico frouxo ou clipe nasal quebrado (respirador)</td><td>Descartar — não há reparo seguro</td></tr>
+            <tr><td>Mau cheiro, manchas ou endurecimento (borracha/plástico)</td><td>Indício de degradação — substituir</td></tr>
+            <tr><td>CA ilegível ou vencido</td><td>Não usar — reportar ao SESMT</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="module-nav-actions">
+        <button class="btn ghost" data-goto="m4">← Módulo 4</button>
+        <button class="btn primary" data-complete="m5" data-goto="m6">Concluir módulo 5 e avançar →</button>
+      </div>
+    </section>
+
+    <!-- ============ MÓDULO 6 ============ -->
+    <section class="pane" data-pane="m6">
+      <div class="kicker"><span class="pill teal">Módulo 6 de 7</span><span class="pill amber">NR‑06, item 6.7.2‑e/f</span></div>
+      <h1 class="page-title">Higienização, conservação, guarda e descarte</h1>
+      <p class="lede">A diferença entre limpar e higienizar — e o que fazer com o EPI quando o expediente termina.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="eyebrow">Limpeza (Glossário NR‑06)</div>
+          <p style="margin-top:8px">Remoção de sujidade e resíduos, manual ou mecânica, com água, detergente, sabão ou sanitizante de uso comum.</p>
+        </div>
+        <div class="card">
+          <div class="eyebrow">Higienização (Glossário NR‑06)</div>
+          <p style="margin-top:8px">Remoção de contaminantes que exigem cuidado específico — contempla descontaminação e desinfecção.</p>
+        </div>
+      </div>
+
+      <h2 class="sec">Por tipo de EPI</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>EPI</th><th>Procedimento</th></tr></thead>
+          <tbody>
+            <tr><td>Descartáveis (luva, máscara, gorro, avental não tecido)</td><td>Uso único — descartar após cada procedimento/paciente, nunca reutilizar.</td></tr>
+            <tr><td>Óculos e protetor facial reutilizáveis</td><td>Higienizar com solução indicada pelo fabricante entre usos; guardar seco, longe de luz direta.</td></tr>
+            <tr><td>Calçado</td><td>Limpeza diária; higienização imediata após contato com fluidos.</td></tr>
+            <tr><td>Respirador PFF2/N95</td><td>Uso individual; nunca compartilhar; descartar conforme orientação do fabricante/SESMT (geralmente ao fim do turno ou se danificado/úmido).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <div class="ic">♻️</div>
+        <div><div class="t">Descarte de EPI contaminado</div>
+        <p>O descarte de EPI usado em contato com material biológico segue o Plano de Gerenciamento de Resíduos de Serviços de Saúde (PGRSS) do hospital — fora do escopo direto da NR‑06, mas obrigatório em ambiente hospitalar. Use sempre a lixeira/saco identificado conforme a cor e o protocolo interno do Hospital Domingos Lourenço.</p></div>
+      </div>
+
+      <p>Danos, extravio ou impropriedade para uso devem ser comunicados de imediato à chefia/SESMT (item 6.6.1‑d), que deve providenciar substituição imediata (item 6.5.1‑g).</p>
+
+      <div class="module-nav-actions">
+        <button class="btn ghost" data-goto="m5">← Módulo 5</button>
+        <button class="btn primary" data-complete="m6" data-goto="m7">Concluir módulo 6 e avançar →</button>
+      </div>
+    </section>
+
+    <!-- ============ MÓDULO 7 ============ -->
+    <section class="pane" data-pane="m7">
+      <div class="kicker"><span class="pill teal">Módulo 7 de 7</span><span class="pill amber">Presencial obrigatório</span></div>
+      <h1 class="page-title">Componente prático presencial</h1>
+      <p class="lede">Este bloco é conduzido pelo instrutor/responsável técnico, no hospital, com cada trabalhador — não pode ser substituído pela parte EAD (ver justificativa na apresentação do curso).</p>
+
+      <h2 class="sec">Roteiro da sessão prática</h2>
+      <ol class="list">
+        <li>Verificação visual do EPI que o trabalhador recebeu (CA legível, validade, integridade).</li>
+        <li>Demonstração de colocação pelo instrutor.</li>
+        <li>Colocação pelo próprio trabalhador, com correção em tempo real.</li>
+        <li>Teste de vedação do respirador (quando aplicável ao setor).</li>
+        <li>Retirada segura, na ordem correta, com correção em tempo real.</li>
+        <li>Registro no checklist individual, assinado pelo instrutor e pelo trabalhador.</li>
+      </ol>
+
+      <div class="card" style="margin-top:20px">
+        <div class="eyebrow">Checklist prático individual — imprimir uma via por trabalhador</div>
+        <div style="margin-top:12px" class="grid-2">
+          <label class="field">Nome do trabalhador<input type="text" id="p7nome" placeholder="Nome completo"></label>
+          <label class="field">Setor<input type="text" id="p7setor" placeholder="Ex.: Centro cirúrgico"></label>
+        </div>
+        <div class="chk-cat">
+          <div class="chk-item"><input type="checkbox"><span class="txt">Reconhece o(s) EPI do setor e respectivo CA<span class="ref">6.9.3</span></span></div>
+          <div class="chk-item"><input type="checkbox"><span class="txt">Coloca o EPI na sequência correta, sem contaminar áreas limpas<span class="ref">6.7.2‑d</span></span></div>
+          <div class="chk-item"><input type="checkbox"><span class="txt">Executa o teste de vedação do respirador corretamente (se aplicável)<span class="ref">6.7.2‑d</span></span></div>
+          <div class="chk-item"><input type="checkbox"><span class="txt">Retira o EPI na sequência correta, sem se contaminar<span class="ref">6.7.2‑d</span></span></div>
+          <div class="chk-item"><input type="checkbox"><span class="txt">Sabe identificar sinais de EPI danificado e a quem reportar<span class="ref">6.6.1‑d</span></span></div>
+        </div>
+        <div class="grid-2" style="margin-top:14px">
+          <label class="field">Instrutor / responsável técnico<input type="text" id="p7instrutor" placeholder="Nome e qualificação"></label>
+          <label class="field">Data<input type="date" id="p7data"></label>
+        </div>
+        <div style="margin-top:16px" class="sign-row cert">
+          <div class="sign"><div class="line"></div><div class="who">Assinatura do trabalhador</div></div>
+          <div class="sign"><div class="line"></div><div class="who">Assinatura do instrutor</div></div>
+        </div>
+        <div style="margin-top:14px"><button class="btn ghost no-print" onclick="window.print()">🖨️ Imprimir esta ficha</button></div>
+      </div>
+
+      <div class="module-nav-actions">
+        <button class="btn ghost" data-goto="m6">← Módulo 6</button>
+        <button class="btn primary" data-complete="m7" data-goto="avaliacao">Ir para a avaliação →</button>
+      </div>
+    </section>
+
+    <!-- ============ AVALIAÇÃO ============ -->
+    <section class="pane" data-pane="avaliacao">
+      <div class="kicker"><span class="pill teal">Módulo 8</span><span class="pill amber">Anexo II, itens 4.6–4.6.3</span></div>
+      <h1 class="page-title">Avaliação de aprendizagem</h1>
+      <p class="lede">10 questões cobrindo os itens 6.7.2 (a–f) da NR‑06. Nota mínima para conceito <b>satisfatório</b>: 70%.</p>
+
+      <form id="quizForm">
+        <div class="q" data-correct="1">
+          <div class="stem">1. Segundo a NR‑06, o que torna um equipamento um EPI legalmente reconhecido?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q1" value="0">Ser fabricado com material resistente</label>
+            <label class="opt"><input type="radio" name="q1" value="1">Possuir Certificado de Aprovação (CA) válido</label>
+            <label class="opt"><input type="radio" name="q1" value="2">Ser aprovado pela CIPA do hospital</label>
+            <label class="opt"><input type="radio" name="q1" value="3">Custar acima de determinado valor</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="2">
+          <div class="stem">2. Durante o isolamento de um paciente com suspeita de tuberculose (transmissão por aerossóis), qual proteção respiratória é adequada?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q2" value="0">Máscara cirúrgica comum</label>
+            <label class="opt"><input type="radio" name="q2" value="1">Nenhuma, se a porta ficar fechada</label>
+            <label class="opt"><input type="radio" name="q2" value="2">Respirador PFF2/N95 com teste de vedação</label>
+            <label class="opt"><input type="radio" name="q2" value="3">Duas máscaras cirúrgicas sobrepostas</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="0">
+          <div class="stem">3. Um colaborador percebe que a luva rasgou no meio de um procedimento. O que a NR‑06 determina?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q3" value="0">Trocar imediatamente e comunicar o ocorrido</label>
+            <label class="opt"><input type="radio" name="q3" value="1">Terminar o procedimento e trocar depois</label>
+            <label class="opt"><input type="radio" name="q3" value="2">Cobrir o rasgo com outra luva por cima</label>
+            <label class="opt"><input type="radio" name="q3" value="3">Continuar, pois o risco é baixo</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="1">
+          <div class="stem">4. De quem é a responsabilidade de fornecer o EPI gratuitamente e em perfeito estado?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q4" value="0">Do próprio trabalhador, mediante reembolso</label>
+            <label class="opt"><input type="radio" name="q4" value="1">Da organização (hospital)</label>
+            <label class="opt"><input type="radio" name="q4" value="2">Do sindicato da categoria</label>
+            <label class="opt"><input type="radio" name="q4" value="3">Do fabricante do EPI</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="2">
+          <div class="stem">5. Antes de usar um respirador PFF2/N95, o trabalhador deve:</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q5" value="0">Verificar apenas se está dentro da embalagem</label>
+            <label class="opt"><input type="radio" name="q5" value="1">Molhar levemente para melhor ajuste</label>
+            <label class="opt"><input type="radio" name="q5" value="2">Fazer o teste de vedação (fit check)</label>
+            <label class="opt"><input type="radio" name="q5" value="3">Usar por cima da máscara cirúrgica sempre</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="3">
+          <div class="stem">6. Qual é a ordem correta ao retirar os EPI após atender um paciente em isolamento de contato?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q6" value="0">Máscara, avental, luvas, higienizar as mãos</label>
+            <label class="opt"><input type="radio" name="q6" value="1">Avental, luvas, máscara, higienizar as mãos</label>
+            <label class="opt"><input type="radio" name="q6" value="2">Tirar tudo junto de uma vez, para agilizar</label>
+            <label class="opt"><input type="radio" name="q6" value="3">Luvas, higienizar as mãos, óculos, avental, máscara, higienizar as mãos</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="1">
+          <div class="stem">7. O que a NR‑06 diz sobre o número de higienizações de um EPI reutilizável?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q7" value="0">Pode ser higienizado indefinidamente</label>
+            <label class="opt"><input type="radio" name="q7" value="1">Acima do limite informado pelo fabricante, a proteção não é mais garantida e o EPI deve ser trocado</label>
+            <label class="opt"><input type="radio" name="q7" value="2">Só pode ser higienizado uma vez</label>
+            <label class="opt"><input type="radio" name="q7" value="3">A norma não trata desse assunto</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="0">
+          <div class="stem">8. Um trabalhador usa óculos de grau. Segundo a NR‑06, quem arca com o custo de adaptar o EPI (óculos de sobrepor ou similar)?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q8" value="0">A organização, sem ônus para o empregado</label>
+            <label class="opt"><input type="radio" name="q8" value="1">O próprio trabalhador</label>
+            <label class="opt"><input type="radio" name="q8" value="2">Metade cada um</label>
+            <label class="opt"><input type="radio" name="q8" value="3">O convênio médico do trabalhador</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="2">
+          <div class="stem">9. Qual desses NÃO é uma obrigação do trabalhador prevista na NR‑06 (item 6.6.1)?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q9" value="0">Usar o EPI apenas para a finalidade a que se destina</label>
+            <label class="opt"><input type="radio" name="q9" value="1">Comunicar quando o EPI for extraviado ou danificado</label>
+            <label class="opt"><input type="radio" name="q9" value="2">Pagar pela reposição de EPI danificado por uso normal</label>
+            <label class="opt"><input type="radio" name="q9" value="3">Zelar pela limpeza, guarda e conservação</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="q" data-correct="1">
+          <div class="stem">10. Ao chegar um lote novo de luvas, o técnico de enfermagem percebe que a caixa não tem o número do CA nem o lote de fabricação. O que fazer?</div>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q10" value="0">Usar normalmente — a caixa provavelmente veio certa</label>
+            <label class="opt"><input type="radio" name="q10" value="1">Não usar e reportar ao SESMT/compras antes de liberar o lote</label>
+            <label class="opt"><input type="radio" name="q10" value="2">Usar só em procedimentos de baixo risco</label>
+            <label class="opt"><input type="radio" name="q10" value="3">Descartar a caixa sem avisar ninguém</label>
+          </div>
+          <div class="fb"></div>
+        </div>
+
+        <div class="module-nav-actions">
+          <button class="btn ghost" type="button" data-goto="m7">← Módulo 7</button>
+          <button class="btn primary" type="submit">Enviar avaliação</button>
+        </div>
+      </form>
+
+      <div id="scoreArea"></div>
+    </section>
+
+    <!-- ============ CERTIFICADO ============ -->
+    <section class="pane" data-pane="certificado">
+      <div class="kicker"><span class="pill teal">Módulo 9</span><span class="pill amber">NR‑01, item 1.7.1.1</span></div>
+      <h1 class="page-title">Certificado de conclusão</h1>
+      <p class="lede">Preencha os campos abaixo — eles alimentam o certificado ao lado, pronto para impressão/arquivo. Complete a avaliação com nota ≥ 70% para liberar a emissão.</p>
+
+      <div class="form-grid">
+        <label class="field full">Nome completo do trabalhador<input type="text" id="cNome" placeholder="Ex.: Maria da Silva Santos"></label>
+        <label class="field">Setor / função<input type="text" id="cSetor" placeholder="Ex.: Enfermagem — UTI"></label>
+        <label class="field">Matrícula ou CPF<input type="text" id="cMatricula" placeholder="Ex.: 00000000-0"></label>
+        <label class="field">Local de realização<input type="text" id="cLocal" placeholder="Ex.: Hospital Domingos Lourenço — sala de treinamento / EAD" value="Hospital Domingos Lourenço"></label>
+        <label class="field">Data de conclusão<input type="date" id="cData"></label>
+        <label class="field">Carga horária<input type="text" id="cCarga" placeholder="Ex.: 5h30" value="5h30"></label>
+        <label class="field">Responsável técnico<input type="text" id="cResp" placeholder="Nome e qualificação (ex.: Eng.º de Segurança do Trabalho)"></label>
+        <label class="field">Instrutor(a)<input type="text" id="cInstrutor" placeholder="Nome e qualificação"></label>
+      </div>
+      <div style="margin:16px 0"><button class="btn primary no-print" id="btnGerarCert">Gerar certificado</button></div>
+
+      <div id="certArea"></div>
+
+      <div class="card no-print" id="confirmCard" style="margin-top:22px; display:none;">
+        <div class="eyebrow">Confirmar conclusão para o SESMT</div>
+        <p style="margin:8px 0 14px;font-size:.9rem;color:var(--ink-soft)">Isto <b>não é automático</b> — sem este passo, o SESMT não fica sabendo que você concluiu. Clique em enviar (ou copie e cole numa mensagem) para <span class="control-email mono"></span>. Esse e‑mail é o registro usado para montar a lista de presença e emitir/arquivar seu certificado oficialmente.</p>
+        <textarea id="confirmText" readonly rows="10" style="width:100%;font-family:'IBM Plex Mono',monospace;font-size:.76rem;line-height:1.5;border:1px solid var(--line-strong);border-radius:9px;padding:12px;background:var(--paper-sunken);color:var(--ink);resize:vertical;"></textarea>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <a class="btn primary" id="btnMailto" href="#">📧 Enviar confirmação por e‑mail</a>
+          <button class="btn ghost" type="button" id="btnCopyConfirm">📋 Copiar dados</button>
+        </div>
+        <div id="copyMsg" style="font-size:.82rem;color:var(--green-700);margin-top:8px;display:none;font-family:Archivo;font-weight:600;">✓ Copiado — cole em um e‑mail ou mensagem para o SESMT.</div>
+      </div>
+    </section>
+
+    <!-- ============ MATRIZ DE CONFORMIDADE ============ -->
+    <section class="pane" data-pane="matriz">
+      <div class="kicker"><span class="pill teal">Para o SESMT</span><span class="pill amber">Evidência de auditoria</span></div>
+      <h1 class="page-title">Matriz de conformidade NR‑06 × NR‑01</h1>
+      <p class="lede">Cada exigência normativa, o item exato da norma e onde este curso a atende — use como evidência em fiscalização ou auditoria interna.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Norma / item</th><th>Exigência</th><th>Como este curso atende</th></tr></thead>
+          <tbody>
+            <tr><td class="code">NR‑06 · 6.7.1</td><td>Informações/treinamentos de EPI seguem a NR‑01</td><td>Estrutura completa conforme NR‑01, itens 1.7 e Anexo II (ver abaixo)</td></tr>
+            <tr><td class="code">NR‑06 · 6.7.2‑a</td><td>Descrição do equipamento e componentes</td><td>Módulos 1 e 3</td></tr>
+            <tr><td class="code">NR‑06 · 6.7.2‑b</td><td>Risco contra o qual o EPI protege</td><td>Módulo 3 (tabela por situação)</td></tr>
+            <tr><td class="code">NR‑06 · 6.7.2‑c</td><td>Restrições e limitações de proteção</td><td>Módulo 5</td></tr>
+            <tr><td class="code">NR‑06 · 6.7.2‑d</td><td>Forma adequada de uso e ajuste</td><td>Módulo 4 (teoria) + Módulo 7 (prática presencial obrigatória)</td></tr>
+            <tr><td class="code">NR‑06 · 6.7.2‑e</td><td>Manutenção e substituição</td><td>Módulos 5 e 6</td></tr>
+            <tr><td class="code">NR‑06 · 6.7.2‑f</td><td>Limpeza, higienização, guarda e conservação</td><td>Módulo 6</td></tr>
+            <tr><td class="code">NR‑06 · 6.9.3</td><td>Verificação de marcações do CA no equipamento</td><td>Módulo 1 + questão 10 da avaliação</td></tr>
+            <tr><td class="code">NR‑01 · 1.7.1.1</td><td>Certificado com nome/assinatura, conteúdo, carga horária, data, local, instrutor e responsável técnico</td><td>Módulo 9 — Certificado</td></tr>
+            <tr><td class="code">NR‑01 · 1.7.1.2</td><td>Treinamento inicial, periódico e eventual</td><td>Definido na Apresentação (periodicidade e gatilhos de reciclagem)</td></tr>
+            <tr><td class="code">NR‑01 · Anexo II, 3.1</td><td>Projeto pedagógico com itens a–o</td><td>Seção "Apresentação"</td></tr>
+            <tr><td class="code">NR‑01 · Anexo II, 4.5</td><td>Canal de dúvidas operacional durante o curso</td><td>A preencher pelo SESMT na Apresentação</td></tr>
+            <tr><td class="code">NR‑01 · Anexo II, 4.6–4.6.3</td><td>Avaliação com conceito satisfatório/insatisfatório e situações práticas de rotina</td><td>Módulo 8 — nota mínima 70%, questões 2, 3, 5, 6 e 10 são situações de rotina</td></tr>
+            <tr><td class="code">NR‑01 · Anexo II, 1.7.9.1</td><td>Conteúdo prático só pode ser EAD se NR específica previr — NR‑06 não prevê</td><td>Módulo 7 mantido presencial/supervisionado, com checklist assinado</td></tr>
+            <tr><td class="code">NR‑01 · Anexo II, 4.7</td><td>Registro de conclusão, resultado da avaliação e logs de acesso</td><td>Módulo 9 — cada trabalhador envia confirmação por e‑mail (nome, setor, matrícula, data, pontuação, ID do certificado) para <span class="control-email mono"></span>; o SESMT concilia esses e‑mails com a lista de funcionários para saber quem falta</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <div class="ic">📋</div>
+        <div><div class="t">O que este curso NÃO substitui</div>
+        <p>Esta plataforma cobre o conteúdo, a avaliação e o certificado. Cabem à organização: nomear formalmente o responsável técnico, manter o registro central dos treinamentos (item 1.7.4, NR‑01), arquivar os certificados e o checklist prático assinado, e formalizar a periodicidade de reciclagem no PGR/plano de treinamentos.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ CHECKLIST DE AUDITORIA ============ -->
+    <section class="pane" data-pane="checklist">
+      <div class="kicker"><span class="pill teal">Para o SESMT</span><span class="pill amber">Autoauditoria / preparação para fiscalização</span></div>
+      <h1 class="page-title">Checklist de auditoria</h1>
+      <p class="lede">Use antes de uma fiscalização do MTE ou de uma auditoria interna — o estado marcado fica salvo neste dispositivo.</p>
+
+      <div class="chk-cat">
+        <h3 class="sub">Documentação</h3>
+        <div class="chk-item"><input type="checkbox" data-id="doc1"><span class="txt">Projeto pedagógico assinado e disponível para Inspeção do Trabalho, sindicato e CIPA<span class="ref">Anexo II · 4.1</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="doc2"><span class="txt">Responsável técnico pela capacitação formalmente nomeado<span class="ref">Anexo II · 3.1‑d</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="doc3"><span class="txt">Certificados emitidos com todos os campos do item 1.7.1.1<span class="ref">NR‑01 · 1.7.1.1</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="doc4"><span class="txt">Cópia do certificado arquivada na organização e disponível ao trabalhador<span class="ref">NR‑01 · 1.7.3</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="doc5"><span class="txt">Capacitação consignada nos documentos funcionais do empregado<span class="ref">NR‑01 · 1.7.4</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="doc6"><span class="txt">E‑mails de confirmação de conclusão conciliados com a lista de funcionários (quem fez / quem falta)<span class="ref">Módulo 9</span></span></div>
+      </div>
+
+      <div class="chk-cat">
+        <h3 class="sub">Metodologia EAD/semipresencial</h3>
+        <div class="chk-item"><input type="checkbox" data-id="ead1"><span class="txt">Curso executado em Ambiente Virtual de Aprendizagem apropriado<span class="ref">Anexo II · 5.1</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="ead2"><span class="txt">Canal de dúvidas ativo durante todo o período do curso<span class="ref">Anexo II · 4.5</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="ead3"><span class="txt">Curso realizado em ambiente/horário dedicado, sem concomitância com o trabalho<span class="ref">Anexo II · 4.4</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="ead4"><span class="txt">Conteúdo prático mantido presencial/supervisionado (não delegado ao EAD)<span class="ref">Anexo II · 1.7.9.1</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="ead5"><span class="txt">Logs de acesso dos participantes mantidos por, no mínimo, 2 anos após a validade do curso<span class="ref">Anexo II · 4.7.1</span></span></div>
+      </div>
+
+      <div class="chk-cat">
+        <h3 class="sub">Conteúdo e avaliação</h3>
+        <div class="chk-item"><input type="checkbox" data-id="con1"><span class="txt">Os 6 itens do 6.7.2 (a–f) estão todos cobertos no conteúdo<span class="ref">NR‑06 · 6.7.2</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="con2"><span class="txt">Avaliação inclui situações práticas da rotina do trabalhador<span class="ref">Anexo II · 4.6.3</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="con3"><span class="txt">Critério satisfatório/insatisfatório definido e documentado<span class="ref">Anexo II · 4.6</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="con4"><span class="txt">Checklist prático individual assinado por trabalhador e instrutor<span class="ref">Módulo 7</span></span></div>
+      </div>
+
+      <div class="chk-cat">
+        <h3 class="sub">Reciclagem</h3>
+        <div class="chk-item"><input type="checkbox" data-id="rec1"><span class="txt">Periodicidade do treinamento periódico definida formalmente (ex.: 12 meses)<span class="ref">NR‑01 · 1.7.1.2.2</span></span></div>
+        <div class="chk-item"><input type="checkbox" data-id="rec2"><span class="txt">Gatilhos de treinamento eventual mapeados (troca de EPI, acidente, afastamento &gt;180 dias)<span class="ref">NR‑01 · 1.7.1.2.3</span></span></div>
+      </div>
+
+      <div style="margin-top:18px"><button class="btn ghost no-print" onclick="window.print()">🖨️ Imprimir checklist</button></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var STORE_KEY = "nr06_ead_nilopolis_v1";
+  var CONTROL_EMAIL = "sst@domingoslourenco.com.br";
+  document.querySelectorAll(".control-email").forEach(function(el){ el.textContent = CONTROL_EMAIL; });
+  var state = load();
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : {done:{}, checklist:{}, quizScore:null};
+    }catch(e){ return {done:{}, checklist:{}, quizScore:null}; }
+  }
+  function save(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+
+  var order = ["apresentacao","m1","m2","m3","m4","m5","m6","m7","avaliacao","certificado","matriz","checklist"];
+  var trackable = ["apresentacao","m1","m2","m3","m4","m5","m6","m7","avaliacao"]; // counted in progress ring
+
+  var panes = document.querySelectorAll(".pane");
+  var links = document.querySelectorAll(".side-link");
+
+  function showPane(id){
+    panes.forEach(function(p){ p.classList.toggle("active", p.dataset.pane===id); });
+    links.forEach(function(l){ l.classList.toggle("active", l.dataset.target===id); });
+    document.getElementById("sidebar").classList.remove("open");
+    window.scrollTo({top:0, behavior:"instant" in window ? "instant":"auto"});
+    location.hash = id;
+  }
+
+  links.forEach(function(l){
+    l.addEventListener("click", function(){ showPane(l.dataset.target); });
+  });
+  document.querySelectorAll("[data-goto]").forEach(function(b){
+    b.addEventListener("click", function(){ showPane(b.dataset.goto); });
+  });
+  document.querySelectorAll("[data-complete]").forEach(function(b){
+    b.addEventListener("click", function(){
+      state.done[b.dataset.complete] = true;
+      save(); renderProgress();
+    });
+  });
+
+  document.getElementById("menuBtn").addEventListener("click", function(){
+    document.getElementById("sidebar").classList.toggle("open");
+  });
+
+  function renderProgress(){
+    links.forEach(function(l){
+      l.classList.toggle("done", !!state.done[l.dataset.target]);
+    });
+    var doneCount = trackable.filter(function(k){return state.done[k];}).length;
+    var pct = Math.round(100*doneCount/trackable.length);
+    document.getElementById("progFill").style.width = pct+"%";
+    document.getElementById("progPct").textContent = pct+"%";
+  }
+
+  // ---- Quiz ----
+  var quizForm = document.getElementById("quizForm");
+  quizForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var qs = quizForm.querySelectorAll(".q");
+    var correctCount = 0;
+    qs.forEach(function(q){
+      var name = q.querySelector("input").name;
+      var chosen = quizForm.querySelector('input[name="'+name+'"]:checked');
+      var correctVal = q.dataset.correct;
+      var opts = q.querySelectorAll(".opt");
+      opts.forEach(function(o){ o.classList.remove("correct","wrong"); });
+      var fb = q.querySelector(".fb");
+      if(chosen && chosen.value === correctVal){
+        correctCount++;
+        chosen.closest(".opt").classList.add("correct");
+        fb.textContent = "Correto.";
+        fb.className = "fb show ok";
+      } else {
+        if(chosen) chosen.closest(".opt").classList.add("wrong");
+        var correctInput = q.querySelector('input[value="'+correctVal+'"]');
+        if(correctInput) correctInput.closest(".opt").classList.add("correct");
+        fb.textContent = chosen ? "Resposta incorreta — a opção correta está destacada." : "Questão não respondida — a opção correta está destacada.";
+        fb.className = "fb show bad";
+      }
+    });
+    var pct = Math.round(100*correctCount/qs.length);
+    var passed = pct >= 70;
+    state.quizScore = pct; state.quizPassed = passed;
+    if(passed) state.done["avaliacao"] = true;
+    save(); renderProgress();
+
+    var area = document.getElementById("scoreArea");
+    area.innerHTML =
+      '<div class="score-banner '+(passed?"pass":"fail")+'">' +
+        '<div class="num mono">'+pct+'%</div>' +
+        '<div><div style="font-family:Archivo;font-weight:700;font-size:1rem">'+(passed?"Aprovado — conceito satisfatório":"Não atingiu a nota mínima (70%)")+'</div>' +
+        '<div style="font-size:.86rem;color:var(--ink-soft);margin-top:2px">'+correctCount+' de '+qs.length+' questões corretas. '+(passed?"Você já pode emitir o certificado.":"Revise os módulos indicados nas questões erradas e tente novamente.")+'</div></div>' +
+      '</div>' +
+      (passed ? '<button class="btn primary" data-goto="certificado" onclick="document.querySelector(\'[data-target=certificado]\').click()">Emitir certificado →</button>' : '');
+  });
+
+  // ---- Certificate ----
+  document.getElementById("btnGerarCert").addEventListener("click", function(){
+    var g = function(id){ return document.getElementById(id).value.trim(); };
+    var nome = g("cNome");
+    if(!nome){ alert("Preencha ao menos o nome completo do trabalhador."); return; }
+    if(!state.quizPassed){
+      var ok = confirm("A avaliação ainda não foi concluída com nota ≥ 70%. Deseja gerar o certificado mesmo assim (ex.: para revisão)?");
+      if(!ok) return;
+    }
+    var dataStr = g("cData");
+    var dataFmt = dataStr ? new Date(dataStr+"T00:00:00").toLocaleDateString("pt-BR") : "________________";
+    var certId = "NR06-" + Date.now().toString(36).toUpperCase();
+    var setor = g("cSetor"), matricula = g("cMatricula"), local = g("cLocal"), carga = g("cCarga"),
+        resp = g("cResp"), instrutor = g("cInstrutor"),
+        score = state.quizScore!=null ? state.quizScore+"%" : "não realizada";
+
+    var html =
+      '<div class="cert">' +
+        '<div class="top"><div class="k">Certificado de conclusão</div><h2>Capacitação em NR‑06 — Equipamentos de Proteção Individual</h2>' +
+        '<div style="font-size:.82rem;color:var(--ink-faint)">Modalidade semipresencial (EAD + prática) · '+(g("cCarga")||"—")+'</div></div>' +
+        '<div class="name">'+esc(nome)+'</div>' +
+        '<p class="body-txt">concluiu a capacitação acima, atendendo aos itens 6.7.2 (a–f) da NR‑06 e às diretrizes de capacitação da NR‑01 (item 1.7 e Anexo II), incluindo avaliação de aprendizagem'+(state.quizScore!=null?(' com aproveitamento de '+state.quizScore+'%'):'')+'.</p>' +
+        '<div class="meta-grid">' +
+          '<div><div class="k">Setor / função</div>'+esc(setor||"—")+'</div>' +
+          '<div><div class="k">Matrícula / CPF</div>'+esc(matricula||"—")+'</div>' +
+          '<div><div class="k">Local de realização</div>'+esc(local||"—")+'</div>' +
+          '<div><div class="k">Data de conclusão</div>'+dataFmt+'</div>' +
+        '</div>' +
+        '<div class="sign-row">' +
+          '<div class="sign"><div class="line"></div><div class="who">'+esc(resp||"Responsável técnico")+'</div></div>' +
+          '<div class="sign"><div class="line"></div><div class="who">'+esc(instrutor||"Instrutor(a)")+'</div></div>' +
+        '</div>' +
+        '<div class="id mono">'+certId+'</div>' +
+      '</div>' +
+      '<div class="no-print" style="margin-top:16px;display:flex;gap:10px"><button class="btn primary" onclick="printCert()">🖨️ Imprimir / salvar em PDF</button></div>' +
+      '<p class="no-print" style="font-size:.8rem;color:var(--ink-faint);max-width:60ch">Este certificado é gerado no seu dispositivo. Arquive uma cópia (impressa ou PDF via impressão) na organização, conforme NR‑01, item 1.7.3.</p>';
+
+    document.getElementById("certArea").innerHTML = html;
+    state.done["certificado"] = true; save(); renderProgress();
+
+    // ---- build + reveal the e-mail confirmation card ----
+    var recordLines = [
+      "Confirmação de conclusão — Capacitação NR-06 (EPI)",
+      "Hospital Domingos Lourenço",
+      "",
+      "Nome: "+nome,
+      "Setor/função: "+(setor||"—"),
+      "Matrícula/CPF: "+(matricula||"—"),
+      "Local: "+(local||"—"),
+      "Data de conclusão: "+dataFmt,
+      "Carga horária: "+(carga||"—"),
+      "Pontuação da avaliação: "+score,
+      "ID do certificado: "+certId,
+      "Responsável técnico: "+(resp||"—"),
+      "Instrutor(a): "+(instrutor||"—"),
+      "",
+      "--- linha para planilha (separado por ;) ---",
+      [nome,setor,matricula,dataFmt,score,certId].join(";")
+    ];
+    var recordText = recordLines.join("\n");
+    document.getElementById("confirmText").value = recordText;
+    document.getElementById("confirmCard").style.display = "block";
+    var subject = "NR-06 EPI — Conclusão: "+nome+(setor?" ("+setor+")":"");
+    document.getElementById("btnMailto").href =
+      "mailto:"+CONTROL_EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(recordText);
+  });
+
+  document.getElementById("btnCopyConfirm").addEventListener("click", function(){
+    var txt = document.getElementById("confirmText").value;
+    var msg = document.getElementById("copyMsg");
+    function shown(){ msg.style.display="block"; setTimeout(function(){msg.style.display="none";}, 3000); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(shown).catch(function(){
+        var ta = document.getElementById("confirmText"); ta.select(); document.execCommand("copy"); shown();
+      });
+    } else {
+      var ta = document.getElementById("confirmText"); ta.select(); document.execCommand("copy"); shown();
+    }
+  });
+  window.printCert = function(){
+    document.querySelector('[data-pane="certificado"]').classList.add("printing");
+    window.print();
+    setTimeout(function(){ document.querySelector('[data-pane="certificado"]').classList.remove("printing"); }, 300);
+  };
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+
+  // ---- checklist persistence ----
+  document.querySelectorAll(".chk-item input[type=checkbox]").forEach(function(cb){
+    var id = cb.dataset.id;
+    if(id && state.checklist[id]) cb.checked = true;
+    cb.addEventListener("change", function(){
+      if(id){ state.checklist[id] = cb.checked; save(); }
+    });
+  });
+
+  // init
+  renderProgress();
+  var initial = (location.hash||"").replace("#","");
+  showPane(order.indexOf(initial)>-1 ? initial : "apresentacao");
+})();
+</script>
