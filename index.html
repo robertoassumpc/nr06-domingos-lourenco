@@ -210,6 +210,40 @@ label.field input, label.field select{
 }
 @media (max-width:760px){ .form-grid{grid-template-columns:1fr;} }
 
+/* auth gate */
+.auth-gate{
+  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+  background:var(--paper);
+}
+.auth-card{
+  width:100%; max-width:420px; background:var(--paper-raised); border:1px solid var(--line); border-radius:16px;
+  padding:32px 30px; box-shadow:var(--shadow);
+}
+.auth-card .mark{
+  width:40px;height:40px;border-radius:10px;background:var(--teal-700); color:#fff; display:grid; place-items:center;
+  font-family:"Archivo"; font-weight:800; font-size:.82rem; margin-bottom:16px;
+}
+.auth-card h1{ font-size:1.4rem; font-weight:800; margin:0 0 4px; }
+.auth-card .sub{ font-size:.86rem; color:var(--ink-soft); margin:0 0 20px; }
+.auth-tabs{ display:flex; gap:4px; background:var(--paper-sunken); border-radius:10px; padding:4px; margin-bottom:20px; }
+.auth-tab{ flex:1; text-align:center; padding:8px; border-radius:8px; border:none; background:none; font-family:"Archivo"; font-weight:700; font-size:.82rem; color:var(--ink-faint); }
+.auth-tab.active{ background:var(--paper-raised); color:var(--teal-700); box-shadow:var(--shadow); }
+.auth-form{ display:flex; flex-direction:column; gap:12px; }
+.auth-form[hidden]{ display:none; }
+.auth-form label.field input{ width:100%; }
+.auth-error{ font-size:.82rem; color:var(--red-600); background:var(--red-100); border-radius:8px; padding:8px 10px; display:none; }
+.auth-error.show{ display:block; }
+.auth-card .btn.primary{ justify-content:center; }
+.auth-note{
+  margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:.76rem; color:var(--ink-faint); line-height:1.5;
+}
+.session-chip{
+  display:flex; align-items:center; gap:8px; font-family:"Archivo"; font-size:.78rem; color:var(--ink-soft);
+}
+.session-chip .who{ font-weight:700; color:var(--ink); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.session-chip button{ background:none; border:1px solid var(--line-strong); border-radius:7px; padding:4px 9px; font-family:"Archivo"; font-weight:600; font-size:.74rem; color:var(--ink-soft); }
+.session-chip button:hover{ background:var(--paper-sunken); }
+
 /* certificate */
 .cert{
   border:2px solid var(--teal-700); border-radius:4px; padding:44px 48px; background:var(--paper-raised);
@@ -267,7 +301,39 @@ details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font
 }
 </style>
 
-<div class="app-shell">
+<div class="auth-gate" id="authGate">
+  <div class="auth-card">
+    <div class="mark">SST</div>
+    <h1>Identificação do colaborador</h1>
+    <p class="sub">SESMT · Hospital Domingos Lourenço — NR‑06 EPI (EAD)</p>
+
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" id="tabLogin">Entrar</button>
+      <button type="button" class="auth-tab" id="tabSignup">Criar conta</button>
+    </div>
+
+    <form class="auth-form" id="loginForm">
+      <label class="field">E‑mail<input type="email" id="liEmail" required placeholder="seu.email@dominio.com"></label>
+      <label class="field">Senha<input type="password" id="liSenha" required placeholder="••••••••"></label>
+      <div class="auth-error" id="liErro"></div>
+      <button class="btn primary" type="submit">Entrar</button>
+    </form>
+
+    <form class="auth-form" id="signupForm" hidden>
+      <label class="field">Nome completo<input type="text" id="suNome" required placeholder="Ex.: Maria da Silva Santos"></label>
+      <label class="field">E‑mail<input type="email" id="suEmail" required placeholder="seu.email@dominio.com"></label>
+      <label class="field">Setor / função<input type="text" id="suSetor" placeholder="Ex.: Enfermagem — UTI"></label>
+      <label class="field">Criar senha (mín. 6 caracteres)<input type="password" id="suSenha" required minlength="6" placeholder="••••••••"></label>
+      <label class="field">Confirmar senha<input type="password" id="suSenha2" required minlength="6" placeholder="••••••••"></label>
+      <div class="auth-error" id="suErro"></div>
+      <button class="btn primary" type="submit">Criar conta e entrar</button>
+    </form>
+
+    <div class="auth-note">⚠️ Este login identifica quem está fazendo o curso e fica registrado neste navegador — não é uma conta na nuvem verificada pelo hospital. Ele serve para vincular seu nome e e‑mail à confirmação de conclusão enviada ao SESMT, não como controle de acesso à prova de fraude.</div>
+  </div>
+</div>
+
+<div class="app-shell" id="appShell" hidden>
   <div class="topbar">
     <button class="menu-btn ui" id="menuBtn" aria-label="Abrir menu">☰</button>
     <div class="brand">
@@ -278,6 +344,10 @@ details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font
       </div>
     </div>
     <div class="spacer"></div>
+    <div class="session-chip no-print">
+      <span>Logado como</span><span class="who" id="sessionWho"></span>
+      <button type="button" id="btnLogout">Sair</button>
+    </div>
     <div class="progress-wrap no-print">
       <div class="progress-label"><span id="progPct">0%</span> concluído</div>
       <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
@@ -1053,11 +1123,15 @@ details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font
   document.querySelectorAll(".control-email").forEach(function(el){ el.textContent = CONTROL_EMAIL; });
   var state = load();
 
+  function defaultState(){ return {done:{}, checklist:{}, quizScore:null, accounts:{}, currentUser:null, sessionLoginAt:null}; }
   function load(){
     try{
       var raw = localStorage.getItem(STORE_KEY);
-      return raw ? JSON.parse(raw) : {done:{}, checklist:{}, quizScore:null};
-    }catch(e){ return {done:{}, checklist:{}, quizScore:null}; }
+      var parsed = raw ? JSON.parse(raw) : {};
+      var d = defaultState();
+      for (var k in d){ if(!(k in parsed)) parsed[k] = d[k]; }
+      return parsed;
+    }catch(e){ return defaultState(); }
   }
   function save(){
     try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
@@ -1187,10 +1261,17 @@ details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font
     state.done["certificado"] = true; save(); renderProgress();
 
     // ---- build + reveal the e-mail confirmation card ----
+    var loginEmail = state.currentUser || "—";
+    var loginAtFmt = state.sessionLoginAt ? new Date(state.sessionLoginAt).toLocaleString("pt-BR") : "—";
     var recordLines = [
       "Confirmação de conclusão — Capacitação NR-06 (EPI)",
       "Hospital Domingos Lourenço",
       "",
+      "--- Colaborador logado na plataforma ---",
+      "E‑mail de login: "+loginEmail,
+      "Login realizado em: "+loginAtFmt,
+      "",
+      "--- Dados da conclusão ---",
       "Nome: "+nome,
       "Setor/função: "+(setor||"—"),
       "Matrícula/CPF: "+(matricula||"—"),
@@ -1203,7 +1284,7 @@ details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font
       "Instrutor(a): "+(instrutor||"—"),
       "",
       "--- linha para planilha (separado por ;) ---",
-      [nome,setor,matricula,dataFmt,score,certId].join(";")
+      [nome,loginEmail,setor,matricula,dataFmt,score,certId,loginAtFmt].join(";")
     ];
     var recordText = recordLines.join("\n");
     document.getElementById("confirmText").value = recordText;
@@ -1232,6 +1313,105 @@ details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font
   };
   function esc(s){ return String(s).replace(/[&<>"']/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
 
+  // ---- Auth (local identification only — not a real cloud account) ----
+  function sha256(text){
+    var enc = new TextEncoder().encode(text);
+    return crypto.subtle.digest("SHA-256", enc).then(function(buf){
+      return Array.prototype.map.call(new Uint8Array(buf), function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+    });
+  }
+  function normEmail(e){ return (e||"").trim().toLowerCase(); }
+
+  var authGate = document.getElementById("authGate");
+  var appShell = document.getElementById("appShell");
+
+  function renderAuth(){
+    var acc = state.currentUser ? state.accounts[state.currentUser] : null;
+    if (acc){
+      authGate.hidden = true;
+      appShell.hidden = false;
+      document.getElementById("sessionWho").textContent = acc.nome + " · " + state.currentUser;
+      prefillFromAccount();
+    } else {
+      authGate.hidden = false;
+      appShell.hidden = true;
+    }
+  }
+
+  function prefillFromAccount(){
+    var acc = state.accounts[state.currentUser];
+    if(!acc) return;
+    var nomeEl = document.getElementById("cNome");
+    var setorEl = document.getElementById("cSetor");
+    if(nomeEl && !nomeEl.value) nomeEl.value = acc.nome;
+    if(setorEl && !setorEl.value && acc.setor) setorEl.value = acc.setor;
+    var p7 = document.getElementById("p7nome");
+    if(p7 && !p7.value) p7.value = acc.nome;
+    var p7s = document.getElementById("p7setor");
+    if(p7s && !p7s.value && acc.setor) p7s.value = acc.setor;
+  }
+
+  document.getElementById("tabLogin").addEventListener("click", function(){
+    document.getElementById("tabLogin").classList.add("active");
+    document.getElementById("tabSignup").classList.remove("active");
+    document.getElementById("loginForm").hidden = false;
+    document.getElementById("signupForm").hidden = true;
+  });
+  document.getElementById("tabSignup").addEventListener("click", function(){
+    document.getElementById("tabSignup").classList.add("active");
+    document.getElementById("tabLogin").classList.remove("active");
+    document.getElementById("signupForm").hidden = false;
+    document.getElementById("loginForm").hidden = true;
+  });
+
+  document.getElementById("signupForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var erro = document.getElementById("suErro");
+    erro.classList.remove("show");
+    var nome = document.getElementById("suNome").value.trim();
+    var email = normEmail(document.getElementById("suEmail").value);
+    var setor = document.getElementById("suSetor").value.trim();
+    var senha = document.getElementById("suSenha").value;
+    var senha2 = document.getElementById("suSenha2").value;
+    if(!nome || !email){ erro.textContent = "Preencha nome e e‑mail."; erro.classList.add("show"); return; }
+    if(senha.length < 6){ erro.textContent = "A senha precisa ter pelo menos 6 caracteres."; erro.classList.add("show"); return; }
+    if(senha !== senha2){ erro.textContent = "As senhas não coincidem."; erro.classList.add("show"); return; }
+    if(state.accounts[email]){ erro.textContent = 'Já existe uma conta com este e‑mail neste navegador — use "Entrar".'; erro.classList.add("show"); return; }
+    sha256(senha).then(function(hash){
+      state.accounts[email] = { nome: nome, setor: setor, passwordHash: hash, createdAt: new Date().toISOString() };
+      state.currentUser = email;
+      state.sessionLoginAt = new Date().toISOString();
+      save();
+      renderAuth();
+    });
+  });
+
+  document.getElementById("loginForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var erro = document.getElementById("liErro");
+    erro.classList.remove("show");
+    var email = normEmail(document.getElementById("liEmail").value);
+    var senha = document.getElementById("liSenha").value;
+    var acc = state.accounts[email];
+    if(!acc){ erro.textContent = 'Não encontramos uma conta com este e‑mail neste navegador. Use "Criar conta".'; erro.classList.add("show"); return; }
+    sha256(senha).then(function(hash){
+      if(hash !== acc.passwordHash){ erro.textContent = "Senha incorreta."; erro.classList.add("show"); return; }
+      state.currentUser = email;
+      state.sessionLoginAt = new Date().toISOString();
+      save();
+      renderAuth();
+    });
+  });
+
+  document.getElementById("btnLogout").addEventListener("click", function(){
+    state.currentUser = null;
+    state.sessionLoginAt = null;
+    save();
+    renderAuth();
+    document.getElementById("liEmail").value = "";
+    document.getElementById("liSenha").value = "";
+  });
+
   // ---- checklist persistence ----
   document.querySelectorAll(".chk-item input[type=checkbox]").forEach(function(cb){
     var id = cb.dataset.id;
@@ -1242,6 +1422,7 @@ details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font
   });
 
   // init
+  renderAuth();
   renderProgress();
   var initial = (location.hash||"").replace("#","");
   showPane(order.indexOf(initial)>-1 ? initial : "apresentacao");
