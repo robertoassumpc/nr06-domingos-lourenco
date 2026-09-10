@@ -237,6 +237,15 @@ label.field input, label.field select{
 .chk-item input{ margin-top:4px; width:16px; height:16px; accent-color:var(--teal-700); flex:none;}
 .chk-item .txt{ font-size:.92rem; }
 .chk-item .ref{ font-family:"IBM Plex Mono"; font-size:.7rem; color:var(--teal-600); margin-left:6px;}
+details.evidence{ margin:0 0 10px 26px; }
+details.evidence summary{ cursor:pointer; font-family:"Archivo"; font-weight:600; font-size:.78rem; color:var(--teal-600); list-style:none; }
+details.evidence summary::-webkit-details-marker{ display:none; }
+details.evidence summary::before{ content:"▸ "; }
+details.evidence[open] summary::before{ content:"▾ "; }
+details.evidence .evidence-body{ margin-top:6px; padding:10px 12px; background:var(--paper-sunken); border:1px solid var(--line); border-radius:8px; }
+details.evidence .evidence-body p{ margin:0 0 5px; font-size:.82rem; color:var(--ink-soft); max-width:60ch; }
+details.evidence .evidence-body p:last-child{ margin-bottom:0; }
+details.evidence .evidence-body b{ color:var(--ink); font-family:"Archivo"; font-weight:700; }
 
 @media (max-width:900px){
   .app-shell{ grid-template-columns:1fr; }
@@ -897,39 +906,138 @@ label.field input, label.field select{
     <section class="pane" data-pane="checklist">
       <div class="kicker"><span class="pill teal">Para o SESMT</span><span class="pill amber">Autoauditoria / preparação para fiscalização</span></div>
       <h1 class="page-title">Checklist de auditoria</h1>
-      <p class="lede">Use antes de uma fiscalização do MTE ou de uma auditoria interna — o estado marcado fica salvo neste dispositivo.</p>
+      <p class="lede">Use antes de uma fiscalização do MTE ou de uma auditoria interna — o estado marcado fica salvo neste dispositivo. Clique em <b>"Como evidenciar"</b> em cada item para ver exatamente qual documento produzir e onde guardar.</p>
 
       <div class="chk-cat">
         <h3 class="sub">Documentação</h3>
+
         <div class="chk-item"><input type="checkbox" data-id="doc1"><span class="txt">Projeto pedagógico assinado e disponível para Inspeção do Trabalho, sindicato e CIPA<span class="ref">Anexo II · 4.1</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> PDF da seção "Apresentação" deste curso (já contém os itens a–o do projeto pedagógico), assinado pelo responsável técnico.</p>
+          <p><b>Como gerar:</b> abra a seção Apresentação → Ctrl/Cmd+P → "Salvar como PDF" → colher assinatura (física ou digital) do responsável técnico.</p>
+          <p><b>Onde arquivar:</b> pasta SESMT/Treinamentos/NR‑06, nomeada <span class="mono">NR06_ProjetoPedagogico_AAAA.pdf</span>.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="doc2"><span class="txt">Responsável técnico pela capacitação formalmente nomeado<span class="ref">Anexo II · 3.1‑d</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> termo de designação/nomeação do responsável técnico, com nome, registro profissional (CREA/MTE) e assinatura.</p>
+          <p><b>Como gerar:</b> documento curto de 1 página — "Termo de Designação de Responsável Técnico pela Capacitação NR‑06" — assinado pela direção do hospital e pelo profissional.</p>
+          <p><b>Onde arquivar:</b> anexado ao projeto pedagógico (item acima).</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="doc3"><span class="txt">Certificados emitidos com todos os campos do item 1.7.1.1<span class="ref">NR‑01 · 1.7.1.1</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> os próprios certificados em PDF gerados no módulo 9 — já trazem nome, conteúdo, carga horária, data, local, instrutor e responsável técnico.</p>
+          <p><b>Como gerar:</b> automático — cada trabalhador já gera e imprime/salva o certificado ao concluir. Você só precisa reunir as cópias.</p>
+          <p><b>Onde arquivar:</b> uma pasta "Certificados NR‑06" com um arquivo por trabalhador (nome + matrícula + data).</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="doc4"><span class="txt">Cópia do certificado arquivada na organização e disponível ao trabalhador<span class="ref">NR‑01 · 1.7.3</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> o e‑mail de confirmação que cada trabalhador envia no módulo 9 já serve de comprovante de recebimento — ele contém o mesmo ID do certificado.</p>
+          <p><b>Como gerar:</b> nenhuma ação extra — é o e‑mail já descrito no item "E‑mails conciliados" abaixo.</p>
+          <p><b>Onde arquivar:</b> caixa de entrada <span class="control-email mono"></span> + aba "Confirmações recebidas" da planilha de controle.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="doc5"><span class="txt">Capacitação consignada nos documentos funcionais do empregado<span class="ref">NR‑01 · 1.7.4</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> lançamento no prontuário/ficha funcional ou no sistema de RH do hospital.</p>
+          <p><b>Como gerar:</b> repassar ao RH a lista de "Concluído" da aba Roster da planilha, para lançamento no sistema deles.</p>
+          <p><b>Onde arquivar:</b> sistema de RH do hospital (fora desta ferramenta).</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="doc6"><span class="txt">E‑mails de confirmação de conclusão conciliados com a lista de funcionários (quem fez / quem falta)<span class="ref">Módulo 9</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> a planilha de controle preenchida — aba "Confirmações recebidas" (log de cada e‑mail) cruzada com a aba "Roster" (status Concluído/Pendente).</p>
+          <p><b>Como gerar:</b> ao chegar cada e‑mail de confirmação, copie os dados para uma linha da aba "Confirmações recebidas" e atualize o status do trabalhador na aba "Roster".</p>
+          <p><b>Onde arquivar:</b> a própria planilha (Controle_Treinamento_NR06), com backup periódico.</p>
+        </div></details>
       </div>
 
       <div class="chk-cat">
         <h3 class="sub">Metodologia EAD/semipresencial</h3>
+
         <div class="chk-item"><input type="checkbox" data-id="ead1"><span class="txt">Curso executado em Ambiente Virtual de Aprendizagem apropriado<span class="ref">Anexo II · 5.1</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> o link público do curso funcionando, mais uma captura de tela datada da estrutura de módulos (essa própria página é a evidência viva).</p>
+          <p><b>Como gerar:</b> tire um print da tela inicial do curso e salve com a data de hoje — serve de prova de que o AVA existia e funcionava naquele período.</p>
+          <p><b>Onde arquivar:</b> junto do projeto pedagógico, com a URL anotada.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="ead2"><span class="txt">Canal de dúvidas ativo durante todo o período do curso<span class="ref">Anexo II · 4.5</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> print do histórico do canal (WhatsApp, e‑mail) mostrando que estava disponível durante as datas do curso.</p>
+          <p><b>Como gerar:</b> defina um canal oficial — pode ser o mesmo <span class="control-email mono"></span> ou um WhatsApp do SESMT — e divulgue no início do curso; guarde prints periódicos.</p>
+          <p><b>Onde arquivar:</b> pasta de evidências do período do curso.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="ead3"><span class="txt">Curso realizado em ambiente/horário dedicado, sem concomitância com o trabalho<span class="ref">Anexo II · 4.4</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> comunicado interno informando que o curso deve ser feito em horário reservado, não durante o atendimento.</p>
+          <p><b>Como gerar:</b> memorando curto assinado pela chefia/SESMT, divulgado junto com o link do curso.</p>
+          <p><b>Onde arquivar:</b> pasta de evidências, anexado ao projeto pedagógico.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="ead4"><span class="txt">Conteúdo prático mantido presencial/supervisionado (não delegado ao EAD)<span class="ref">Anexo II · 1.7.9.1</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> os checklists práticos individuais (módulo 7), impressos e assinados por trabalhador e instrutor.</p>
+          <p><b>Como gerar:</b> já integrado ao curso — basta imprimir a ficha do módulo 7 para cada trabalhador, aplicar a sessão prática e colher as assinaturas.</p>
+          <p><b>Onde arquivar:</b> pasta física ou digitalizada, uma ficha por trabalhador.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="ead5"><span class="txt">Logs de acesso dos participantes mantidos por, no mínimo, 2 anos após a validade do curso<span class="ref">Anexo II · 4.7.1</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> a coluna "Data/hora recebido" da aba "Confirmações recebidas" da planilha — é o registro de quando cada trabalhador concluiu.</p>
+          <p><b>Como gerar:</b> preencha sempre essa coluna ao registrar uma confirmação recebida (a página não guarda logs de acesso nominal sozinha, por ser um site estático — a planilha é o seu log oficial).</p>
+          <p><b>Onde arquivar:</b> a planilha, mantida por no mínimo 2 anos após a validade do treinamento (com backup em nuvem).</p>
+        </div></details>
       </div>
 
       <div class="chk-cat">
         <h3 class="sub">Conteúdo e avaliação</h3>
+
         <div class="chk-item"><input type="checkbox" data-id="con1"><span class="txt">Os 6 itens do 6.7.2 (a–f) estão todos cobertos no conteúdo<span class="ref">NR‑06 · 6.7.2</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> a própria seção "Matriz de conformidade" deste curso, que já mapeia cada letra (a–f) ao módulo que a cobre.</p>
+          <p><b>Como gerar:</b> abra a seção Matriz de conformidade → imprima/exporte em PDF.</p>
+          <p><b>Onde arquivar:</b> junto do projeto pedagógico.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="con2"><span class="txt">Avaliação inclui situações práticas da rotina do trabalhador<span class="ref">Anexo II · 4.6.3</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> print das 10 questões do módulo 8 — 5 delas já são cenários de rotina (isolamento, luva rasgada, lote sem CA, etc.), não só teoria.</p>
+          <p><b>Como gerar:</b> abra a seção Avaliação → imprima a página.</p>
+          <p><b>Onde arquivar:</b> anexo ao projeto pedagógico.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="con3"><span class="txt">Critério satisfatório/insatisfatório definido e documentado<span class="ref">Anexo II · 4.6</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> a própria seção Avaliação, que já declara "nota mínima 70% = satisfatório".</p>
+          <p><b>Como gerar:</b> nenhuma ação extra — já está escrito no curso; inclua na impressão do item acima.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="con4"><span class="txt">Checklist prático individual assinado por trabalhador e instrutor<span class="ref">Módulo 7</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> mesma ficha do item "Conteúdo prático mantido presencial" acima — a ficha impressa e assinada do módulo 7.</p>
+          <p><b>Onde arquivar:</b> pasta física ou digitalizada, uma por trabalhador.</p>
+        </div></details>
       </div>
 
       <div class="chk-cat">
         <h3 class="sub">Reciclagem</h3>
+
         <div class="chk-item"><input type="checkbox" data-id="rec1"><span class="txt">Periodicidade do treinamento periódico definida formalmente (ex.: 12 meses)<span class="ref">NR‑01 · 1.7.1.2.2</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> um documento curto de política interna — "Política de Reciclagem de Treinamentos SST" — definindo a periodicidade de cada NR, incluindo a NR‑06.</p>
+          <p><b>Como gerar:</b> 1 página assinada pelo responsável técnico/SESMT, com a tabela de periodicidades (já sugerida na seção Apresentação deste curso).</p>
+          <p><b>Onde arquivar:</b> junto do projeto pedagógico.</p>
+        </div></details>
+
         <div class="chk-item"><input type="checkbox" data-id="rec2"><span class="txt">Gatilhos de treinamento eventual mapeados (troca de EPI, acidente, afastamento &gt;180 dias)<span class="ref">NR‑01 · 1.7.1.2.3</span></span></div>
+        <details class="evidence"><summary>Como evidenciar</summary><div class="evidence-body">
+          <p><b>Evidência:</b> mesmo documento do item acima, listando os gatilhos que disparam um novo treinamento antes do prazo periódico.</p>
+          <p><b>Onde arquivar:</b> junto do projeto pedagógico.</p>
+        </div></details>
       </div>
 
       <div style="margin-top:18px"><button class="btn ghost no-print" onclick="window.print()">🖨️ Imprimir checklist</button></div>
